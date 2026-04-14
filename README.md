@@ -279,11 +279,10 @@ mvn test
 
 ## UML Diagrams
 
-Open `uml-diagrams/diagrams.html` in a browser to view:
+Open `uml-diagrams/` in a browser to view:
 
 - **Class Diagram** — software structure and class relationships
 - **Deployment Diagram** — physical server/client layout
-- **Use Case Diagram** — user interactions
 
 ---
 
