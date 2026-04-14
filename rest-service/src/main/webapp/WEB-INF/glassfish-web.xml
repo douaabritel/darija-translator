@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-web-app PUBLIC
+    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN"
+    "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<!--
+    GlassFish / Payara deployment descriptor.
+    Maps the security realm declared in web.xml to a real realm on the server.
+
+    Setup steps on GlassFish/Payara:
+    1. Open Admin Console → Configurations → server-config → Security → Realms
+    2. Create a "file" realm named "DarijaTranslatorRealm"
+    3. Add users and assign roles "user" / "admin"
+    OR use: asadmin create-file-user ‑‑groups user translator-user
+-->
+<glassfish-web-app>
+    <security-role-mapping>
+        <role-name>user</role-name>
+        <group-name>translator-users</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>admin</role-name>
+        <group-name>translator-admins</group-name>
+    </security-role-mapping>
+    <context-root>/darija-translator</context-root>
+</glassfish-web-app>

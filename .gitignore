@@ -1,0 +1,36 @@
+# Maven build output
+target/
+*.class
+*.war
+*.jar
+
+# Node / React Native
+node_modules/
+.expo/
+dist/
+web-build/
+npm-debug.log*
+
+# Environment & secrets
+.env
+.env.*
+*.key
+gemini-key.txt
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# Logs
+*.log
+logs/
+
+# GlassFish domain data (if accidentally included)
+domains/

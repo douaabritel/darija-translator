@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darija Translator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f8;
+      color: #1a1a2e;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #c1272d 0%, #006233 100%);
+      color: white;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    header .flag { font-size: 1.6rem; }
+    header h1 { font-size: 1rem; font-weight: 700; }
+    header p  { font-size: 0.72rem; opacity: 0.85; }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 12px;
+      padding: 14px;
+    }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1.5px solid #dde1e7;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 90px;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    textarea:focus { outline: none; border-color: #c1272d; }
+
+    .lang-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    select {
+      flex: 1;
+      padding: 7px 10px;
+      border: 1.5px solid #dde1e7;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: white;
+      cursor: pointer;
+    }
+    .arrow { font-size: 1.1rem; color: #888; }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #btn-translate {
+      background: linear-gradient(135deg, #c1272d, #9e1f23);
+      color: white;
+    }
+    #btn-translate:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(193,39,45,0.35); }
+    #btn-clear {
+      background: #f0f0f0;
+      color: #555;
+    }
+    #btn-clear:hover { background: #e0e0e0; }
+    #btn-speak {
+      background: linear-gradient(135deg, #006233, #004a26);
+      color: white;
+      flex: 0 0 44px;
+    }
+    #btn-speak:hover { transform: translateY(-1px); }
+    #btn-speak:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+    .output-area {
+      min-height: 90px;
+      background: #f8f9fa;
+      border: 1.5px solid #dde1e7;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      direction: rtl;
+      text-align: right;
+      font-family: 'Traditional Arabic', 'Amiri', serif;
+      color: #1a1a2e;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .placeholder-text { color: #aaa; font-style: italic; direction: ltr; text-align: left; }
+
+    .spinner {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      color: #c1272d;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+    .spinner.active { display: flex; }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #c1272d;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40%            { transform: scale(1);   opacity: 1;   }
+    }
+
+    .error-msg {
+      color: #c1272d;
+      font-size: 0.8rem;
+      margin-top: 6px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* Auth section */
+    .auth-card input {
+      width: 100%;
+      border: 1.5px solid #dde1e7;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      font-family: inherit;
+    }
+    .auth-card input:focus { outline: none; border-color: #c1272d; }
+
+    #btn-save-auth {
+      width: 100%;
+      background: #1a1a2e;
+      color: white;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 0.85rem;
+    }
+
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="flag">🇲🇦</div>
+    <div>
+      <h1>Darija Translator</h1>
+      <p>Powered by Google Gemini AI</p>
+    </div>
+  </header>
+
+  <!-- Auth settings -->
+  <div class="card auth-card">
+    <div class="section-title">⚙️ API Settings</div>
+    <input type="text"     id="inp-username" placeholder="Username" autocomplete="username" />
+    <input type="password" id="inp-password" placeholder="Password" autocomplete="current-password" />
+    <input type="text"     id="inp-server"   placeholder="Server URL (e.g. http://localhost:8080)" />
+    <button id="btn-save-auth">Save Settings</button>
+  </div>
+
+  <!-- Translator -->
+  <div class="card">
+    <div class="section-title">📝 Translate</div>
+
+    <div class="lang-row">
+      <select id="sel-lang">
+        <option value="English">🇬🇧 English</option>
+        <option value="French">🇫🇷 French</option>
+        <option value="Spanish">🇪🇸 Spanish</option>
+        <option value="Arabic">🇸🇦 Arabic (MSA)</option>
+        <option value="German">🇩🇪 German</option>
+      </select>
+      <span class="arrow">→ دارجة</span>
+    </div>
+
+    <label for="inp-text">Source Text</label>
+    <textarea id="inp-text" placeholder="Type or paste text here... (selected text is auto-filled)"></textarea>
+
+    <div class="btn-row">
+      <button id="btn-translate">Translate ترجم</button>
+      <button id="btn-clear">Clear ✕</button>
+    </div>
+
+    <div class="spinner" id="spinner">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <span>Translating…</span>
+    </div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <!-- Output -->
+  <div class="card">
+    <div class="section-title">🇲🇦 Darija Translation</div>
+    <div class="output-area" id="output">
+      <span class="placeholder-text">Translation will appear here…</span>
+    </div>
+    <div class="btn-row" style="margin-top:8px;">
+      <button id="btn-speak" disabled title="Read aloud">🔊</button>
+      <button id="btn-copy" style="background:#f0f0f0;color:#555;">Copy نسخ</button>
+    </div>
+  </div>
+
+  <footer>Darija Translator v1.0 • Mini Project 2</footer>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>

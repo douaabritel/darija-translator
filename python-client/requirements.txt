@@ -1,0 +1,7 @@
+# No third-party packages required — uses only Python stdlib.
+# tkinter is bundled with most Python installations (python3-tk on Linux).
+#
+# For extended features (optional):
+# requests==2.31.0       # nicer HTTP (can replace urllib)
+# gTTS==2.5.1            # text-to-speech audio file generation
+# playsound==1.3.0       # play audio files
